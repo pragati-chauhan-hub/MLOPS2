@@ -1,0 +1,11 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+logs/*.log
+logs/ingestion_log.csv
+data/raw/*.csv
+data/staging/*.csv
+data/cleaned/*.csv
+data/rejected/*.csv
