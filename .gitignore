@@ -9,3 +9,6 @@ data/raw/*.csv
 data/staging/*.csv
 data/cleaned/*.csv
 data/rejected/*.csv
+*.sqlite
+*.sqlite3
+*.db

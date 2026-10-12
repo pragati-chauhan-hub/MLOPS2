@@ -19,7 +19,20 @@ def transform_dataset(input_path: str | Path) -> Path:
     frame = pd.read_csv(input_path)
     frame["subject"] = frame.get("subject", "mathematics")
     frame["semester"] = "current"
-    frame["department"] = "general"
+
+    # Map Mjob (mother's job) → academic department
+    # Falls back to "General Studies" when column is absent (e.g. Portuguese subject file)
+    DEPT_MAP: dict[str, str] = {
+        "teacher":  "Education & Social Sciences",
+        "health":   "Health & Life Sciences",
+        "services": "Engineering & Technology",
+        "at_home":  "Arts & Humanities",
+        "other":    "Commerce & Business",
+    }
+    if "Mjob" in frame.columns:
+        frame["department"] = frame["Mjob"].map(DEPT_MAP).fillna("General Studies")
+    else:
+        frame["department"] = "General Studies"
     frame["attendance_percentage"] = (100 * (1 - frame["absences"].clip(lower=0, upper=93) / 93)).round(2)
     frame["average_internal_marks"] = frame[["G1", "G2"]].mean(axis=1).round(2)
     frame["previous_grade"] = frame["G1"]
